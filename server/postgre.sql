@@ -1,33 +1,62 @@
-DROP DATABASE IF EXISTS qaDB;
+DROP DATABASE IF EXISTS randrDB;
 
-CREATE DATABASE qaDB;
+CREATE DATABASE randrDB;
 
-USE qaDB;
+USE randrDB;
 
 CREATE TABLE review (
-  reviewID INTEGER PRIMARY KEY,
-  productID INTEGER,
-  rating INTEGER,
-  summary TEXT,
+  id SERIAL PRIMARY KEY,
+  product_id SERIAL,
+  rating INT,
+  date BIGINT,
+  summary VARCHAR(1000),
+  body VARCHAR(1000),
   recommended BOOLEAN,
-  response TEXT,
-  body TEXT,
-  name TEXT,
-  helpfulness INTEGER,
-  photos JSON,
   reported BOOLEAN,
+  reviewer_name VARCHAR(50),
+  reviewer_email VARCHAR(50),
+  response VARCHAR(1000),
+  helpfulness INT
 );
 
-CREATE TABLE product (
-  reviewID INTEGER PRIMARY KEY,
-  productID INTEGER,
-);
+COPY reviews
+FROM ''
+DELIMITER ','
+CSV HEADER;
 
-CREATE TABLE meta (
-  productID INTEGER PRIMARY KEY,
-  ratings JSON,
-  recommended JSON,
-  characteristics JSON,
-);
+CREATE TABLE photos (
+  id SERIAL PRIMARY KEY,
+  review_id INT,
+  url TEXT,
+  FOREIGN KEY
+)
 
-module.exports = qaDB;
+COPY photos
+FROM ''
+DELIMITER ','
+CSV HEADER;
+
+CREATE TABLE characteristics (
+  id SERIAL PRIMARY KEY,
+  product_id INT,
+  name VARCHAR(25)
+)
+
+COPY characteristics
+FROM ''
+DELIMITER ','
+CSV HEADER;
+
+CREATE TABLE reviewcharacteristics (
+  id SERIAL PRIMARY KEY,
+  characteristic_id INT,
+  review_id INT,
+  value INT,
+)
+
+COPY reviewcharacteristics
+FROM ''
+DELIMITER ','
+CSV HEADER;
+
+module.exports = randrDB;
